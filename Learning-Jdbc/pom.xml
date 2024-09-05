@@ -35,7 +35,11 @@
 			<version>6.1.12</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>0.8.0.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -52,5 +56,6 @@
 	</build>
 	<modules>
 		<module>ep01-hello-jdbc</module>
+		<module>ep03-java-base-config-with-bone-cp</module>
 	</modules>
 </project>

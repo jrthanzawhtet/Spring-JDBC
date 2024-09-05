@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.jolbox.bonecp.BoneCPConfig;
+import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
 @PropertySource("/database.properties")
@@ -25,11 +26,13 @@ public class ApplicationConfig {
 	
 	@Bean
 	public DataSource dataSource() {
-		var ds = new MysqlConnectionPoolDataSource();
-		ds.setUrl(url);
-		ds.setUser(user);
-		ds.setPassword(password);
-		return ds;
+		
+		var config = new BoneCPConfig();
+		config.setJdbcUrl(url);
+		config.setUser(user);
+		config.setPassword(password);
+		
+		return new BoneCPDataSource(config);
 	}
 	
 	public JdbcTemplate template(DataSource dataSource) {

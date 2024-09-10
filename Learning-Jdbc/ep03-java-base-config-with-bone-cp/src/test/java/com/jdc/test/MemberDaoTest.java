@@ -52,7 +52,7 @@ public class MemberDaoTest {
 			return 0;
 		});
 
-		assertEquals(2, data);
+		assertEquals(2L, data);
 	}
 
 	@Test
@@ -91,13 +91,50 @@ public class MemberDaoTest {
 			}
 			return data;
 		});
+		assertEquals(2L, list.size());
+	}
+
+	@Test
+	@Order(5)
+	void testStaticQueryRollCallbackHaldler() {
+		var list = new ArrayList<Member>();
+
+		dbOperations.query("select * from MEMBER ", rs -> {
+			var m = new Member();
+			m.setLoginId(rs.getString(1));
+			m.setPassword(rs.getString(2));
+			m.setName(rs.getString(3));
+			m.setPhone(rs.getString(4));
+			m.setEmail(rs.getString(5));
+			list.add(m);
+		});
 		assertEquals(2, list.size());
 	}
 	
 	@Test
-	@Order(5)
-	void testStaticQueryRollCallbackHaldler() {
+	@Order(6)
+	void testStaticQueryRollMapper() {
+	    var list = dbOperations.query("select * from MEMBER", (rs, no) -> {
+	        var m = new Member();
+	        m.setLoginId(rs.getString(1));
+	        m.setPassword(rs.getString(2));
+	        m.setName(rs.getString(3));
+	        m.setPhone(rs.getString(4));
+	        m.setEmail(rs.getString(5));
+	        return m; 
+	    });
+
+	    assertEquals(2, list.size());
+	}
+	
+	@Test
+	@Order(7)
+	void testStaticQueryOneResultWithClass() {
+		var count = dbOperations.queryForObject("select count(*) from MEMBER ", Long.class);
+		assertEquals(2L, count);
 		
+		var m = dbOperations.queryForObject("select name from MEMBER  where loginId = 'admin'", String.class);
+		assertEquals("Admin", m);
 	}
 
 }

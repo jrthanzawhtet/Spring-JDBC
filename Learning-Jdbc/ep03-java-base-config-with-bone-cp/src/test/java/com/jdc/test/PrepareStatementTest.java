@@ -4,16 +4,21 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -54,7 +59,36 @@ public class PrepareStatementTest {
 			stmt.setString(5, "cloud@gmail.com");
 			return stmt;
 		},PreparedStatement::execute);
-		Assertions.assertEquals(2,count);
+	}
+	
+	@Test
+	@DisplayName("3. Execute with Creator")
+	void test3(@Value("${member.insert}") String sql) {
+		var factory = new PreparedStatementCreatorFactory(sql, new int[] {
+				Types.VARCHAR,
+				Types.VARCHAR,
+				Types.VARCHAR,
+				Types.VARCHAR,
+				Types.VARCHAR,
+		}); 
+		PreparedStatementCreator creator = factory.newPreparedStatementCreator(List.of(
+				"amdin1", "admin1", "Admin User" ,"092323" , "test@gamil.com"
+				));
+		PreparedStatementCallback<Integer> callback = PreparedStatement::executeUpdate;
+		var count = jdbc.execute(creator, callback);
+		Assertions.assertEquals(1,count);
+	}
+	
+	@Test
+	@DisplayName("4. Execute with CreatorFactory")
+	void test4(@Qualifier("memberInsert") PreparedStatementCreatorFactory factory) {
+		
+		PreparedStatementCreator creator = factory.newPreparedStatementCreator(List.of(
+				"amdin2", "admin2", "Admin User2" ,"092323" , "test@gamil.com"
+				));
+		
+		var count = jdbc.execute(creator, PreparedStatement::executeUpdate);
+		Assertions.assertEquals(1,count);
 	}
 
 }

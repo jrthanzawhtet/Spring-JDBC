@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -19,8 +20,11 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+import com.jdc.jdbc.dto.Member;
 
 @TestMethodOrder(OrderAnnotation.class)
 @SpringJUnitConfig(locations = "/application.xml")
@@ -49,6 +53,7 @@ public class PrepareStatementTest {
 
 	@Test
 	@DisplayName("2. Execute with Creator")
+	@Order(2)
 	void test2(@Value("${member.insert}") String sql) {
 		var count = jdbc.execute((Connection conn) -> {
 			var stmt = conn.prepareStatement(sql);
@@ -63,6 +68,7 @@ public class PrepareStatementTest {
 	
 	@Test
 	@DisplayName("3. Execute with Creator")
+	@Order(3)
 	void test3(@Value("${member.insert}") String sql) {
 		var factory = new PreparedStatementCreatorFactory(sql, new int[] {
 				Types.VARCHAR,
@@ -81,6 +87,7 @@ public class PrepareStatementTest {
 	
 	@Test
 	@DisplayName("4. Execute with CreatorFactory")
+	@Order(4)
 	void test4(@Qualifier("memberInsert") PreparedStatementCreatorFactory factory) {
 		
 		PreparedStatementCreator creator = factory.newPreparedStatementCreator(List.of(
@@ -89,6 +96,44 @@ public class PrepareStatementTest {
 		
 		var count = jdbc.execute(creator, PreparedStatement::executeUpdate);
 		Assertions.assertEquals(1,count);
+	}
+	
+	@Test
+	@DisplayName("5 Execute With Creator for Select Statement")
+	@Order(5)
+	void test5(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
+		var result = jdbc.execute(factory.newPreparedStatementCreator(List.of("%Admin%")), stmt -> {
+			List<Member> list = new ArrayList<>();
+			var rs = stmt.executeQuery();
+			while(rs.next()) {
+				var m = new Member();
+				m.setLoginId(rs.getString(1));
+				m.setPassword(rs.getString(2));
+				m.setName(rs.getString(3));
+				m.setPhone(rs.getString(4));
+				m.setEmail(rs.getString(5));
+				list.add(m);
+			}
+			return list;
+		});
+		Assertions.assertEquals(1,result.size());
+	}
+	
+	@Test
+	@DisplayName("6 Execute With RowMapper")
+	@Order(6)
+	void test6(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
+		
+		RowMapper<Member> rowMapper = (rs, index) -> {
+			var m = new Member();
+			m.setLoginId(rs.getString(1));
+			m.setPassword(rs.getString(2));
+			m.setName(rs.getString(3));
+			m.setPhone(rs.getString(4));
+			m.setEmail(rs.getString(5));
+			return m;
+		};
+		
 	}
 
 }

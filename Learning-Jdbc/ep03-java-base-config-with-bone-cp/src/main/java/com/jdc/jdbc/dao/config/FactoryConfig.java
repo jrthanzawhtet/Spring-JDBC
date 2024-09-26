@@ -18,4 +18,11 @@ public class FactoryConfig {
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, });
 	}
 
+	@Bean
+	@Qualifier("memberFindByNameLike")
+	public PreparedStatementCreatorFactory memberFindByNameLikeCreatorFactory(
+			@Value("${member.select.by.name}") String sql) {
+		return new PreparedStatementCreatorFactory(sql, new int[] { Types.VARCHAR });
+	}
+
 }

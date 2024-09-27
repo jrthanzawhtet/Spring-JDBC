@@ -106,7 +106,7 @@ public class PrepareStatementTest {
 	}
 	
 	@Test
-	@DisplayName("5 Execute With Creator for Select Statement")
+	@DisplayName("5. Execute With Creator for Select Statement")
 	@Order(5)
 	void test5(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
 		var result = jdbc.execute(factory.newPreparedStatementCreator(List.of("Admin%")), stmt -> {
@@ -127,7 +127,7 @@ public class PrepareStatementTest {
 	}
 	
 	@Test
-	@DisplayName("6 Execute With RowMapper")
+	@DisplayName("6. Execute With RowMapper")
 	@Order(6)
 	void test6(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
 		
@@ -144,7 +144,7 @@ public class PrepareStatementTest {
 	}
 	
 	@Test
-	@DisplayName("7 Execute With RowMapper")
+	@DisplayName("7. Execute With RowMapper")
 	@Order(7)
 	void test7(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
 		var result = jdbc.query(factory.newPreparedStatementCreator(List.of("Admin%")),rowMapper);
@@ -153,7 +153,7 @@ public class PrepareStatementTest {
 	}
 	
 	@Test
-	@DisplayName("8 Execute With RowMapper")
+	@DisplayName("8. Execute With RowMapper")
 	@Order(8)
 	void test8(@Qualifier("memberFindByPk") PreparedStatementCreatorFactory factory) {
 		var result = jdbc.query(factory.newPreparedStatementCreator(List.of("network")),rs -> {
@@ -165,6 +165,52 @@ public class PrepareStatementTest {
 		assertNotNull(result);
 		assertEquals("networkAdmin", result.getName());
 		
+	}
+	
+	
+	@Test
+	@DisplayName("9. Execute with Simple SQL String")
+	@Order(9)
+	@Sql(scripts = "/database.sql")
+	void test9(@Value("${member.insert}") String sql) {
+		
+		var count = jdbc.execute(sql, (PreparedStatement stmt) -> {
+			stmt.setString(1,"admin");
+			stmt.setString(2,"admin");
+			stmt.setString(3,"Admin User");
+			stmt.setString(4,"0923231999");
+			stmt.setString(5,"admin@gmail.com");
+			return stmt.executeUpdate();
+		});
+		
+		assertEquals(1, count);
+	}
+	
+	@Test
+	@DisplayName("10. Update with PreparedStatementSetter")
+	@Order(10)
+	@Sql(scripts = "/database.sql")
+	void test10(@Value("${member.insert}") String sql) {
+		
+		var count = jdbc.update(sql, stmt -> {
+			stmt.setString(1,"admin");
+			stmt.setString(2,"admin");
+			stmt.setString(3,"Admin User");
+			stmt.setString(4,"0923231999");
+			stmt.setString(5,"admin@gmail.com");
+		});
+		
+		assertEquals(1, count);
+	}
+	
+	@Test
+	@DisplayName("11. Update with PreparedStatementSetter")
+	@Order(11)
+	@Sql(scripts = "/database.sql")
+	void test11(@Value("${member.insert}") String sql) {
+		int count = jdbc.update(sql,"admin","admin","Admin User","092323499", "admin@gmail.com");
+		
+		assertEquals(1, count);
 	}
 
 }

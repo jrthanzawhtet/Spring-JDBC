@@ -2,6 +2,9 @@ package com.jdc.test;
 
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Types;
@@ -24,6 +27,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import com.jdc.jdbc.dao.mapper.MemberRowMapper;
 import com.jdc.jdbc.dto.Member;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -32,6 +36,9 @@ public class PrepareStatementTest {
 
 	@Autowired
 	private JdbcOperations jdbc;
+	
+	@Autowired
+	private MemberRowMapper rowMapper;
 
 	@Test
 	@DisplayName("1. Execute with Creator")
@@ -102,7 +109,7 @@ public class PrepareStatementTest {
 	@DisplayName("5 Execute With Creator for Select Statement")
 	@Order(5)
 	void test5(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
-		var result = jdbc.execute(factory.newPreparedStatementCreator(List.of("%Admin%")), stmt -> {
+		var result = jdbc.execute(factory.newPreparedStatementCreator(List.of("Admin%")), stmt -> {
 			List<Member> list = new ArrayList<>();
 			var rs = stmt.executeQuery();
 			while(rs.next()) {
@@ -116,7 +123,7 @@ public class PrepareStatementTest {
 			}
 			return list;
 		});
-		Assertions.assertEquals(1,result.size());
+		Assertions.assertEquals(2,result.size());
 	}
 	
 	@Test
@@ -133,6 +140,30 @@ public class PrepareStatementTest {
 			m.setEmail(rs.getString(5));
 			return m;
 		};
+		
+	}
+	
+	@Test
+	@DisplayName("7 Execute With RowMapper")
+	@Order(7)
+	void test7(@Qualifier("memberFindByNameLike") PreparedStatementCreatorFactory factory) {
+		var result = jdbc.query(factory.newPreparedStatementCreator(List.of("Admin%")),rowMapper);
+		assertEquals(2, result.size());
+		
+	}
+	
+	@Test
+	@DisplayName("8 Execute With RowMapper")
+	@Order(8)
+	void test8(@Qualifier("memberFindByPk") PreparedStatementCreatorFactory factory) {
+		var result = jdbc.query(factory.newPreparedStatementCreator(List.of("network")),rs -> {
+			while(rs.next()) {
+				return rowMapper.mapRow(rs, 1);
+			}
+			return null;
+		});
+		assertNotNull(result);
+		assertEquals("networkAdmin", result.getName());
 		
 	}
 

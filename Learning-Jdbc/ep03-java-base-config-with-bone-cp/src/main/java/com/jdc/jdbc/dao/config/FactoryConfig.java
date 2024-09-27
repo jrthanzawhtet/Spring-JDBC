@@ -24,5 +24,13 @@ public class FactoryConfig {
 			@Value("${member.select.by.name}") String sql) {
 		return new PreparedStatementCreatorFactory(sql, new int[] { Types.VARCHAR });
 	}
+	
+	
+	@Bean
+	@Qualifier("memberFindByPk")
+	public PreparedStatementCreatorFactory memberFindByPKCreatorFactory(
+			@Value("${member.select.by.pk}") String sql) {
+		return new PreparedStatementCreatorFactory(sql, new int[] { Types.VARCHAR });
+	}
 
 }

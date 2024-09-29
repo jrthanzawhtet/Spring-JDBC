@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.RowMapper;
+
+import com.jdc.jdbc.dto.Member;
 
 @Configuration
 public class FactoryConfig {
@@ -31,6 +35,12 @@ public class FactoryConfig {
 	public PreparedStatementCreatorFactory memberFindByPKCreatorFactory(
 			@Value("${member.select.by.pk}") String sql) {
 		return new PreparedStatementCreatorFactory(sql, new int[] { Types.VARCHAR });
+	}
+	
+	@Bean
+	@Qualifier("memberRowMapper")
+	public RowMapper<Member> memberRowMapper(){
+		return new BeanPropertyRowMapper<>(Member.class);
 	}
 
 }

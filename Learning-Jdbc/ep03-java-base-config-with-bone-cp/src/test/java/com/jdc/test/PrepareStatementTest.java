@@ -23,6 +23,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -228,7 +229,57 @@ public class PrepareStatementTest {
 		var list = jdbc.query(sql, new BeanPropertyRowMapper<>(Member.class), "Admin%");
 		assertEquals(1, list.size());
 	}
-	
 
+	@Test
+	@DisplayName("15. Select One With PreparedStatementSetter")
+	@Order(15)
+	void test15(@Value("${member.select.by.pk}") String sql) {
+
+		var data = jdbc.query(sql, stmt -> stmt.setString(1, "admin"), rs -> {
+
+			while (rs.next()) {
+				return rowMapper.mapRow(rs, 1);
+			}
+			return null;
+		});
+		assertNotNull(data);
+	}
+
+	@Test
+	@DisplayName("16. Select One With PreparedStatementSetter")
+	@Order(16)
+	void test16(@Value("${member.select.by.pk}") String sql) {
+
+		ResultSetExtractor<Member> extractor = rs -> {
+
+			while (rs.next()) {
+				return rowMapper.mapRow(rs, 1);
+			}
+			return null;
+		};
+
+		var data = jdbc.query(sql, extractor, "admin");
+
+		assertNotNull(data);
+	}
+
+	@Test
+	@DisplayName("17. Select One With Param")
+	@Order(17)
+	void test17(@Value("${member.select.by.pk}") String sql) {
+		var data = jdbc.queryForObject(sql, rowMapper, "admin");
+		assertNotNull(data);
+		assertEquals("Admin User", data.getName());
+	}
+
+	@Test
+	@DisplayName("18. Select One Single Data With Params")
+	@Order(18)
+	void test18() {
+		var sql = "select count(*) from MEMBER where name like ? ";
+		var count = jdbc.queryForObject(sql, Long.class, "Admin%");
+		assertEquals(1, count);
+
+	}
 
 }

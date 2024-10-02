@@ -20,4 +20,11 @@
   <constructor-arg ref="dataSource"></constructor-arg>
   </bean>
   
+  <bean id="categoryInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
+  <constructor-arg ref="dataSource">
+  </constructor-arg>
+  <property name="tableName" value="CATEGORY"></property>
+  <property name="generatedKeyName" value="id"></property>
+  </bean>
+  
 </beans>

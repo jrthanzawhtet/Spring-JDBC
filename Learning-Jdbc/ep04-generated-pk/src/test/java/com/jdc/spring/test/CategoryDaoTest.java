@@ -14,10 +14,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import com.jdc.spring.model.config.ApplicationConfig;
 import com.jdc.spring.model.dao.CategoryDao;
 import com.jdc.spring.model.dto.Category;
 
-@SpringJUnitConfig(locations = "/application.xml")
+//@SpringJUnitConfig(locations = "/application.xml")
+@SpringJUnitConfig(classes = ApplicationConfig.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class CategoryDaoTest {
 
@@ -69,10 +71,30 @@ public class CategoryDaoTest {
 
 	@Test
 	@Order(4)
+	@Disabled
 	void test4() {
 		var c = new Category();
 		c.setName("Lemon");
 		var id = dao.create(c);
+		Assertions.assertEquals(1, id);
+	}
+	
+	@Test
+	@Order(5)
+	@Disabled
+	void test5() {
+		var c = new Category();
+		c.setName("Lemon");
+		var id = dao.createWithSimpleJdbc(c);
+		Assertions.assertEquals(1, id);
+	}
+	
+	@Test
+	@Order(6)
+	void test6() {
+		var c = new Category();
+		c.setName("Lemon");
+		var id = dao.preCreateWithSimpleJdbcInsertInXML(c);
 		Assertions.assertEquals(1, id);
 	}
 

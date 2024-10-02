@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -32,4 +33,11 @@ public class ApplicationConfig {
 		return new JdbcTemplate(dataSource);
 	}
 
+	@Bean
+	public SimpleJdbcInsert categoryInsert(DataSource dataSource) {
+		var insert = new SimpleJdbcInsert(dataSource);
+		insert.setTableName("CATEGORY");
+		insert.setGeneratedKeyName("id");
+		return insert;
+	}
 }

@@ -23,13 +23,13 @@ public class CategoryDao {
 
 	@Autowired
 	private JdbcOperations jdbc;
-	
+
 	@Autowired
 	private JdbcTemplate template;
 
 	@Value("${dml.category.insert}")
 	private String insertSql;
-	
+
 	@Autowired
 	private SimpleJdbcInsert insert;
 
@@ -38,10 +38,10 @@ public class CategoryDao {
 		factory.setReturnGeneratedKeys(true);
 
 		PreparedStatementCreator creator = factory.newPreparedStatementCreator(List.of(category.getName()));
-		
+
 		var keyHolder = new GeneratedKeyHolder();
-		
-		jdbc.update(creator,keyHolder);
+
+		jdbc.update(creator, keyHolder);
 
 		/*
 		 * PreparedStatementCallback<Integer> callback = stmt -> { int affectedRows =
@@ -50,14 +50,13 @@ public class CategoryDao {
 		 * 
 		 * var rs = stmt.getGeneratedKeys(); if (rs.next()) { return rs.getInt(1); }
 		 * else { throw new
-		 * IllegalStateException("Insert succeeded but no ID obtained."); } };
-		 * return jdbc.execute(creator, callback);
+		 * IllegalStateException("Insert succeeded but no ID obtained."); } }; return
+		 * jdbc.execute(creator, callback);
 		 */
 		return keyHolder.getKey().intValue();
-		
+
 	}
-	
-	
+
 	public int createWithSimpleJdbc(Category category) {
 		SimpleJdbcInsert insert = new SimpleJdbcInsert(template);
 		insert.setTableName("CATEGORY");
@@ -72,4 +71,22 @@ public class CategoryDao {
 		params.put("NAME", category.getName());
 		return insert.executeAndReturnKey(params).intValue();
 	}
+
+	public int update(Category c) {
+		return 0;
+	}
+
+	public Category findById(int i) {
+		return null;
+	}
+
+	public List<Category> findByNameLike(String string) {
+		return null;
+	}
+
+	public Object findCountByNameLike(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

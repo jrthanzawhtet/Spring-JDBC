@@ -3,8 +3,9 @@ package com.jdc.spring.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -42,7 +43,7 @@ public class CategoryDaoTest {
 		params.add(new Object[] { 6, "Beauty" });
 
 		var count = jdbc.batchUpdate("INSERT INTO CATEGORY VALUES(?,?)", params);
-		Assertions.assertEquals(6, count.length);
+		assertEquals(6, count.length);
 	}
 
 	@Test
@@ -58,7 +59,7 @@ public class CategoryDaoTest {
 		params.add(new Object[] { "Beauty" });
 
 		var count = jdbc.batchUpdate("INSERT INTO CATEGORY(name) VALUES(?)", params);
-		Assertions.assertEquals(6, count.length);
+		assertEquals(6, count.length);
 	}
 
 	@Test
@@ -76,9 +77,9 @@ public class CategoryDaoTest {
 		var c = new Category();
 		c.setName("Lemon");
 		var id = dao.create(c);
-		Assertions.assertEquals(1, id);
+		assertEquals(1, id);
 	}
-	
+
 	@Test
 	@Order(5)
 	@Disabled
@@ -86,16 +87,54 @@ public class CategoryDaoTest {
 		var c = new Category();
 		c.setName("Lemon");
 		var id = dao.createWithSimpleJdbc(c);
-		Assertions.assertEquals(1, id);
+		assertEquals(1, id);
 	}
-	
+
 	@Test
 	@Order(6)
+	@DisplayName("1. Crate Category")
 	void test6() {
 		var c = new Category();
 		c.setName("Lemon");
 		var id = dao.preCreateWithSimpleJdbcInsertInXML(c);
-		Assertions.assertEquals(1, id);
+		assertEquals(1, id);
 	}
+
+	@Test
+	@Order(7)
+	@DisplayName("2. Update Category")
+	void test7() {
+		var c = new Category();
+		c.setId(1);
+		c.setName("Lemon Tea");
+
+		int count = dao.update(c);
+		assertEquals(1, count);
+	}
+	
+	@Test
+	@Order(8)
+	@DisplayName("3. Find Category By ID")
+	void test8() {
+		Category c = dao.findById(1);
+		assertEquals("Lemon Tea", c.getName());
+	}
+	
+	@Test
+	@Order(9)
+	@DisplayName("4. Find Category By Name")
+	void test9() {
+		List<Category> list = dao.findByNameLike("Tea");
+		assertEquals(1, list.size());
+	}
+	
+	@Test
+	@Order(10)
+	@DisplayName("5. Find Count By Name Like ")
+	void test10() {
+		var count = dao.findCountByNameLike("Lemo");
+		assertEquals(1, count);
+	}
+	
 
 }

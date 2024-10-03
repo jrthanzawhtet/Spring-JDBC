@@ -124,7 +124,7 @@ public class CategoryDaoTest {
 	@Order(9)
 	@DisplayName("4. Find Category By Name")
 	void test9() {
-		List<Category> list = dao.findByNameLike("Tea");
+		List<Category> list = dao.findByNameLike("Lemon Tea");
 		assertEquals(1, list.size());
 	}
 	
@@ -132,7 +132,15 @@ public class CategoryDaoTest {
 	@Order(10)
 	@DisplayName("5. Find Count By Name Like ")
 	void test10() {
-		var count = dao.findCountByNameLike("Lemo");
+		var count = dao.findCountByNameLike("Lemon Tea");
+		assertEquals(1, count);
+	}
+	
+	@Test
+	@Order(11)
+	@DisplayName("6. Delete by Id")
+	void test11() {
+		var count = dao.delete(1);
 		assertEquals(1, count);
 	}
 	

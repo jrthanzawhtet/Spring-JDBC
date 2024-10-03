@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -29,9 +30,28 @@ public class CategoryDao {
 
 	@Value("${dml.category.insert}")
 	private String insertSql;
+	
+	@Value("${dao.category.update}")
+	private String update;
+	@Value("${dao.category.findById}")
+	private String findById;
+	@Value("${dao.category.findByNameLike}")
+	private String findByNameLike;
+	@Value("${dao.category.findCountByNameLike}")
+	private String findCountByNameLike;
+	@Value("${dao.category.delete}")
+	private String delete;
 
 	@Autowired
 	private SimpleJdbcInsert insert;
+	
+	
+	private BeanPropertyRowMapper<Category> rowMapper;
+	
+	public CategoryDao() {
+		rowMapper = new BeanPropertyRowMapper<>(Category.class);
+	}
+	
 
 	public int create(Category category) {
 		PreparedStatementCreatorFactory factory = new PreparedStatementCreatorFactory(insertSql, Types.VARCHAR);
@@ -73,20 +93,23 @@ public class CategoryDao {
 	}
 
 	public int update(Category c) {
-		return 0;
+		return insert.getJdbcTemplate().update(update, c.getName(), c.getId());
 	}
 
-	public Category findById(int i) {
-		return null;
+	public Category findById(int id) {
+		return insert.getJdbcTemplate().queryForObject(findById, rowMapper, id);
 	}
 
-	public List<Category> findByNameLike(String string) {
-		return null;
+	public List<Category> findByNameLike(String name) {
+		return insert.getJdbcTemplate().query(findByNameLike, rowMapper, name.toLowerCase().concat("%"));
 	}
 
-	public Object findCountByNameLike(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public int findCountByNameLike(String name) {
+		return insert.getJdbcTemplate().queryForObject(findCountByNameLike, Integer.class, name.toLowerCase().concat("%"));
+	}
+
+	public int delete(int id) {
+		return insert.getJdbcTemplate().update(delete, id);
 	}
 
 }

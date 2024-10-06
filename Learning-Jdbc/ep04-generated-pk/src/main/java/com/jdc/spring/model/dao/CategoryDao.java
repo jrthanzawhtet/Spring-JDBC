@@ -15,11 +15,11 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.jdc.spring.model.dto.Category;
 
-@Service
+@Repository
 public class CategoryDao {
 
 	@Autowired

@@ -1,9 +1,12 @@
 package com.jdc.spring.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -20,6 +23,27 @@ public class ProductDao {
 	@Value("${dao.product.create}")
 	private String create;
 	
+	@Value("${dao.product.update}")
+	private String update;
+	
+	@Value("${dao.product.delete}")
+	private String delete;
+	
+	@Value("${dao.product.findById}")
+	private String findById;
+	
+	@Value("${dao.product.findByCategoryId}")
+	private String findByCategory;
+	
+	@Value("${dao.product.search}")
+	private String search;
+	
+	private RowMapper<Product> rowMapper;
+	
+	public ProductDao() {
+		rowMapper = new BeanPropertyRowMapper<Product>(Product.class);
+	}
+	
 	public int create(Product product) {
 		var keys = new GeneratedKeyHolder();
 		var params = new MapSqlParameterSource();
@@ -31,23 +55,35 @@ public class ProductDao {
 	}
 
 	public Product findById(int id) {
-		return null;
+		var params = new HashMap<String, Object>();
+		params.put("id", id);
+		return jdbc.queryForObject(findById, params, rowMapper);
 	}
 
 	public List<Product> findByCategory(int categoryId) {
-		return null;
+		var params = new HashMap<String, Object>();
+		params.put("categoryID", categoryId);
+		return jdbc.query(findByCategory, params, rowMapper);
 	}
 
 	public List<Product> search(String keyWord) {
-		return null;
+		var params = new HashMap<String, Object>();
+		params.put("keyword", keyWord.toLowerCase().concat("%"));
+		return jdbc.query(search, params, rowMapper);
 	}
 
 	public int update(Product product) {
-		return 0;
+		var params = new MapSqlParameterSource();
+		params.addValue("id", product.getId());
+		params.addValue("name", product.getName());
+		params.addValue("price", product.getPrice());
+		return jdbc.update(update, params);
 	}
 
-	public int delete(int i) {
-		return 0;
+	public int delete(int id) {
+		var params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		return jdbc.update(delete, params);
 	}
 
 }

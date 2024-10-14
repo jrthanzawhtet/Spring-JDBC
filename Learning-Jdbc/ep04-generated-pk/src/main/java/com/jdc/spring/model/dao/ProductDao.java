@@ -57,7 +57,7 @@ public class ProductDao {
 	public Product findById(int id) {
 		var params = new HashMap<String, Object>();
 		params.put("id", id);
-		return jdbc.queryForObject(findById, params, rowMapper);
+		return jdbc.queryForStream(findById, params, rowMapper).findFirst().orElseGet(() -> null);
 	}
 
 	public List<Product> findByCategory(int categoryId) {

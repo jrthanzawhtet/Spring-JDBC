@@ -30,7 +30,8 @@ public class ProductDaoTest {
 	@Test
 	@Order(1)
 	@DisplayName("1. Create Product Test")
-	@Sql(statements = { "insert into CATEGORY (name) values ('Milk')", "insert into CATEGORY (name) values ('Dairy')" })
+	@Sql(statements = { "insert into CATEGORY (name) values ('Milk')", 
+			"insert into CATEGORY (name) values ('Dairy')" })
 	void test1() {
 		var category = categories.findById(1);
 		var product = new Product();
@@ -48,8 +49,8 @@ public class ProductDaoTest {
 	void test2() {
 		var product = dao.findById(1);
 		assertNotNull(product);
-		assertEquals("De De", product.getName());
-		assertEquals("Milk", product.getCateogry().getName());
+		assertEquals("Milk", product.getName());
+		assertEquals("Dairy", product.getCateogry().getName());
 		assertEquals(8000, product.getPrice());
 		assertNull(dao.findById(2));
 	}

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.jdc.spring.model.dto.Category;
 import com.jdc.spring.model.dto.Product;
 
 @Repository
@@ -38,17 +39,17 @@ public class ProductDao {
 	@Value("${dao.product.search}")
 	private String search;
 	
-	private RowMapper<Product> rowMapper;
+	private RowMapper<ProductDto> rowMapper;
 	
 	public ProductDao() {
-		rowMapper = new BeanPropertyRowMapper<Product>(Product.class);
+		rowMapper = new BeanPropertyRowMapper<ProductDto>(ProductDto.class);
 	}
 	
 	public int create(Product product) {
 		var keys = new GeneratedKeyHolder();
 		var params = new MapSqlParameterSource();
 		params.addValue("name", product.getName());
-		params.addValue("categoryId", product.getCateogry().getId());
+		params.addValue("categoryId", product.getCategory().getId());
 		params.addValue("price", product.getPrice());
 		jdbc.update(create, params, keys);
 		return keys.getKey().intValue();
@@ -63,13 +64,13 @@ public class ProductDao {
 	public List<Product> findByCategory(int categoryId) {
 		var params = new HashMap<String, Object>();
 		params.put("categoryID", categoryId);
-		return jdbc.query(findByCategory, params, rowMapper);
+		return jdbc.queryForStream(findByCategory, params, rowMapper).map(ProductDto::toProduct).toList();
 	}
 
 	public List<Product> search(String keyWord) {
 		var params = new HashMap<String, Object>();
 		params.put("keyword", keyWord.toLowerCase().concat("%"));
-		return jdbc.query(search, params, rowMapper);
+		return jdbc.queryForStream(search, params, rowMapper).map(ProductDto::toProduct).toList();
 	}
 
 	public int update(Product product) {
@@ -85,5 +86,26 @@ public class ProductDao {
 		params.addValue("id", id);
 		return jdbc.update(delete, params);
 	}
+	
+	public static class ProductDto extends Product{
+		public void setCategoryId(int id) {
+			if(null == getCategory()) {
+				setCategory(new Category());
+			}
+			getCategory().setId(id);
+		}
+		public void setCategoryName(String name) {
+			if(null == getCategory()) {
+				setCategory(new Category());
+			}
+			getCategory().setName(name);
+		}
+		
+		public Product toProduct() {
+			return this;
+		}
+	}
+	
+	
 
 }

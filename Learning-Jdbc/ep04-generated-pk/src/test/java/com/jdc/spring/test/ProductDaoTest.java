@@ -35,7 +35,7 @@ public class ProductDaoTest {
 	void test1() {
 		var category = categories.findById(1);
 		var product = new Product();
-		product.setCateogry(category);
+		product.setCategory(category);
 		product.setName("De De");
 		product.setPrice(8000);
 
@@ -49,8 +49,8 @@ public class ProductDaoTest {
 	void test2() {
 		var product = dao.findById(1);
 		assertNotNull(product);
-		assertEquals("Milk", product.getName());
-		assertEquals("Dairy", product.getCateogry().getName());
+		assertEquals("De De", product.getName());
+		assertEquals("Dairy", product.getCategory().getName());
 		assertEquals(8000, product.getPrice());
 		assertNull(dao.findById(2));
 	}
@@ -97,7 +97,7 @@ public class ProductDaoTest {
 	void test6() {
 		int count = dao.delete(1);
 		assertEquals(1, count);
-		assertNotNull(dao.findByCategory(1));
+		assertTrue(dao.findByCategory(1).isEmpty());
 	}
 
 }

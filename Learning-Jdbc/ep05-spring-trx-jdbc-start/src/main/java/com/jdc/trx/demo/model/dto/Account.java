@@ -1,4 +1,4 @@
-package com.jdc.trx.demo.dto;
+package com.jdc.trx.demo.model.dto;
 
 public record Account(
 		int id,

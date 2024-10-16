@@ -1,4 +1,4 @@
-package com.jdc.trx.demo.dto;
+package com.jdc.trx.demo.model.dto;
 
 import java.time.LocalDateTime;
 

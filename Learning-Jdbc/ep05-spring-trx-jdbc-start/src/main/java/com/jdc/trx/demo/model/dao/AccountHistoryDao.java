@@ -39,6 +39,17 @@ public class AccountHistoryDao {
 		return findById(id.intValue());
 		
 	}
+	
+	public AccountHistory credit(int transferId, Account account, int amount) {
+		var id = insert.executeAndReturnKey(Map.of(
+				"transfer_id",transferId,
+				"account_id",account.id(),
+				"type",Type.Credit.name(),
+				"before_amount", account.amount(),
+				"amount",amount
+				));
+		return findById(id.intValue());
+	}
 
 	private AccountHistory findById(int id) {
 		return template.queryForObject("""

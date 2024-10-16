@@ -1,4 +1,4 @@
-package com.jdc.trx.demo.config;
+package com.jdc.trx.demo;
 
 import javax.sql.DataSource;
 

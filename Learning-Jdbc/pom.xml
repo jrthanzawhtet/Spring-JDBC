@@ -64,5 +64,6 @@
 		<module>ep03-java-base-config-with-bone-cp</module>
 		<module>ep04-generated-pk</module>
 		<module>ep05-spring-trx-jdbc-start</module>
+		<module>ep06-spring-trx-propagation</module>
 	</modules>
 </project>

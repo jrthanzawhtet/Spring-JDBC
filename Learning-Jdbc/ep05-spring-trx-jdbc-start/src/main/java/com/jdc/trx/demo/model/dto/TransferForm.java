@@ -6,7 +6,7 @@ public record TransferForm(
 		int account_from,
 		int account_to,
 		int amount,
-		LocalDateTime transfer_at		
-		){
+		LocalDateTime transfer_at
+		) {
 
 }

@@ -20,13 +20,13 @@ public class TransferLogDao {
 		insert.setTableName("transfer_log");
 		insert.setGeneratedKeyName("id");
 		insert.setColumnNames(List.of(
-				"account_from" , "account_to" , "amount",
-				"transfer_at"
-				));
+				"account_from", "account_to", "amount",
+				"transfer_at"));
 	}
-	
+
 	public int create(TransferForm form) {
-		return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(form)).intValue();
+		return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(form))
+				.intValue();
 	}
 
 }

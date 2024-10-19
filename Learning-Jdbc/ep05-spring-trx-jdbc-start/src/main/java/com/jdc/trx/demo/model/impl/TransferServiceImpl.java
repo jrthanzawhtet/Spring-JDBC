@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import com.jdc.trx.demo.model.TransferService;
 import com.jdc.trx.demo.model.TransferServiceException;
 import com.jdc.trx.demo.model.dao.AccountDao;
 import com.jdc.trx.demo.model.dao.AccountHistoryDao;
@@ -12,7 +13,7 @@ import com.jdc.trx.demo.model.dto.TransferForm;
 import com.jdc.trx.demo.model.dto.TransferLog;
 
 @Service
-public class TransferServiceImpl {
+public class TransferServiceImpl implements TransferService{
 	
 	@Autowired
 	private AccountDao accountDao;

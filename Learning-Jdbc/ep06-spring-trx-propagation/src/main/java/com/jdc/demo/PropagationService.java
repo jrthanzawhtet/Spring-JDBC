@@ -1,8 +1,5 @@
 package com.jdc.demo;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +15,7 @@ public class PropagationService {
 	@Autowired
 	private DetailsRepository detailsRepository;
 	
-	public Map<Integer, List<Integer>> save(int state,String header, String ...details) {
+	public Result save(int state,String header, String ...details) {
 		
 		var headerId = headerRepository.create(header);
 		
@@ -31,7 +28,7 @@ public class PropagationService {
 		if(state == 2) {
 			throw new RuntimeException();
 		}
-		return Map.of(headerId, detailsId);
+		return new Result(headerId, detailsId);
 		
 	}
 

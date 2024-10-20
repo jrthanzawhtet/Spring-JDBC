@@ -8,6 +8,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class DetailsRepository {
@@ -21,6 +23,7 @@ public class DetailsRepository {
 		jdbcInsert.setColumnNames(List.of("header_id", "name"));
 	}
 	
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public List<Integer> create(int headerId,String ...names) {
 		
 		List<Integer> list = new ArrayList<Integer>();

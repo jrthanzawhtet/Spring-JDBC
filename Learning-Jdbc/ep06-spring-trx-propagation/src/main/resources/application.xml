@@ -18,5 +18,12 @@
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
         <constructor-arg ref="dataSourceConfig" />
     </bean>
-
+    
+    <bean id="transactionManager"
+    class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <constructor-arg ref="dataSource">
+    </constructor-arg>
+    </bean>
+    
+   <tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

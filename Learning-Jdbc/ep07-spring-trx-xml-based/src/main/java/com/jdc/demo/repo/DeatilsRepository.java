@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class DetailsRepository {
+public class DeatilsRepository {
 	
 	private SimpleJdbcInsert jdbcInsert;
 	
-	public DetailsRepository(DataSource dataSource) {
+	public DeatilsRepository(DataSource dataSource) {
 		jdbcInsert = new SimpleJdbcInsert(dataSource);
 		jdbcInsert.setTableName("details_tbl");
 		jdbcInsert.setGeneratedKeyName("id");

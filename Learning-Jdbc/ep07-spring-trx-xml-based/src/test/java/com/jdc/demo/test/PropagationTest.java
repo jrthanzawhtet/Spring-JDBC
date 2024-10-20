@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import com.jdc.demo.PropagationService;
+import com.jdc.demo.PrepagationService;
 
-@SpringJUnitConfig(locations = "classpath:/application.xml")
+@SpringJUnitConfig(locations = "classpath:/beans.xml")
 @Sql(statements = {
 		"set foreign_key_checks = 0;",
 		"truncate table details_tbl;",
@@ -22,11 +22,11 @@ import com.jdc.demo.PropagationService;
 public class PropagationTest {
 	
 	@Autowired
-	private PropagationService service;
+	private PrepagationService service;
 	
 	@ParameterizedTest
 	@CsvSource({
-		"Header,Details,0,1,1"
+		"Header,Details,1,1,1"
 	})
 	void test(String header, String details, int status,int headerId, int detailsId) {
 		var result = service.save(status, header, details);

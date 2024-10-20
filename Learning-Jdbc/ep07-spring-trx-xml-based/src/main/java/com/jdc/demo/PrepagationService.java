@@ -1,23 +1,27 @@
 package com.jdc.demo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jdc.demo.repo.DetailsRepository;
+import com.jdc.demo.repo.DeatilsRepository;
 import com.jdc.demo.repo.HeaderRepository;
 
 @Service
-public class PropagationService {
+public class PrepagationService {
 	
-	@Autowired
 	private HeaderRepository headerRepository;
 	
-	@Autowired
-	private DetailsRepository detailsRepository;
+	private DeatilsRepository detailsRepository;
 	
-	@Transactional(isolation = Isolation.SERIALIZABLE, timeout = 5)
+	public void setHeaderRepository(HeaderRepository headerRepository) {
+		this.headerRepository = headerRepository;
+	}
+	
+	public void setDetailsRepository(DeatilsRepository detailsRepository) {
+		this.detailsRepository = detailsRepository;
+	}
+	
+	@Transactional
 	public Result save(int state,String header, String ...details) {
 		
 		var headerId = headerRepository.create(header);

@@ -3,6 +3,7 @@ package com.jdc.trx.demo.model.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jdc.trx.demo.model.TransferService;
 import com.jdc.trx.demo.model.TransferServiceException;
@@ -27,6 +28,8 @@ public class TransferServiceImpl implements TransferService{
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	
+	@Override
+	@Transactional
 	public TransferLog transfer(TransferForm form) {
 		eventPublisher.publishEvent(form);
 		

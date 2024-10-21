@@ -7,11 +7,13 @@ import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.jdc.trx.demo.model.dto.TransferForm;
 
+@Component
 public class TransferOperationRollbakListener {
 	
 	private SimpleJdbcInsert insert;

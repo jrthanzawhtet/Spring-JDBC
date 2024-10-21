@@ -71,5 +71,7 @@
 		<module>ep05-spring-trx-jdbc-start</module>
 		<module>ep06-spring-trx-propagation</module>
 		<module>ep07-spring-trx-xml-based</module>
+		<module>spring-tx-programmatic</module>
+		<module>ep08-spring-tx-programmatic</module>
 	</modules>
 </project>

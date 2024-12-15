@@ -73,5 +73,7 @@
 		<module>ep07-spring-trx-xml-based</module>
 		<module>spring-tx-programmatic</module>
 		<module>ep08-spring-tx-programmatic</module>
+		<module>s12-spring-boot-with-example-and-cateria</module>
+		<module>s12-spring-boot-with-example-cateria</module>
 	</modules>
 </project>

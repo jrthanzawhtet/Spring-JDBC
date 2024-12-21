@@ -42,5 +42,6 @@
   <modules>
   	<module>ep01-exampleApi</module>
   	<module>ep02-sorting-and-paging</module>
+  	<module>ep03-spring-boot-with-exampel-and-cateria</module>
   </modules>
 </project>

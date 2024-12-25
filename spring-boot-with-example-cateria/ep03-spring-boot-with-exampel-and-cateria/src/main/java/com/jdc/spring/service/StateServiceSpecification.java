@@ -33,9 +33,9 @@ public class StateServiceSpecification {
 		};
 		return repo.findAll(spec);
 	}
+
+	public long deleteByStateName(String name) {
+		return repo.delete((root, query, cb) -> cb.equal(root.get(State_.name), name));
+	}
 	
-	/*
-	 * public long deleteByStateName(String name) { return
-	 * repo.delete((root,query,cb) -> cb.equal(root.get(State_.name), name)); }
-	 */
 }

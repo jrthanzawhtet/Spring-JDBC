@@ -23,5 +23,17 @@ public class CriteriaTest {
 		System.out.println(list);
 		
 	}
+	
+	@Test
+	void selectByRegionNameLikeTest() {
+		var list = stateService.selectStateByRegionNameLike("T");
+		System.out.println(list);
+	}
+	
+	@Test
+	void selectRegionByStateNameLikeTest() {
+		var list = regionService.selectRegionByStateNameLike("l");
+		System.out.println(list);
+	}
 
 }

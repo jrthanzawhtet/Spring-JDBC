@@ -31,11 +31,12 @@ public class RegionServiceWithSpecification {
 		Specification<Region> spec = (root, query, cb) -> 
 		cb.equal(root.get(Region_.name), name);
 		
-		return regionRepo.deletebyName(spec);
+		return regionRepo.delete(spec);
 	}
 	
+	@Transactional
 	public long deleteStateByRegionName(String name) {
-		return regionRepo.deleteStateByReionName(name);
+		return stateRepo.deleteStateByRegionName(name);
 	}
 	
 	/*

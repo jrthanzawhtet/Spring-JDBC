@@ -20,7 +20,8 @@ public class StateServiceWithCriteria {
 	
 	@PersistenceContext
 	EntityManager em;
-
+	
+	//select s from State s where lower(s.region.name) like lower(:name)
 	public List<State> selectStateByRegionNameLike(String name){
 		var cb = em.getCriteriaBuilder();
 		var regionQuery = cb.createQuery(State.class);
@@ -32,7 +33,7 @@ public class StateServiceWithCriteria {
 		
 		return em.createQuery(query).getResultList();
 	}
-	
+	// select s from State s where lower(s.name) like lower(:name)
 	public List<State> selectStateByNameLike(String name){
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		

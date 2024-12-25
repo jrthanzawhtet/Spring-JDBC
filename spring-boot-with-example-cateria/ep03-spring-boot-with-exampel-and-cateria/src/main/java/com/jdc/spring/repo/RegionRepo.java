@@ -1,20 +1,12 @@
 package com.jdc.spring.repo;
 
-import java.util.List;
-
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import org.springframework.stereotype.Repository;
 
 import com.jdc.spring.entity.Region;
 
-public interface RegionRepo extends JpaRepository<Region, Integer> {
+@Repository
+public interface RegionRepo extends JpaRepositoryImplementation<Region, Integer> {
 
-	long deletebyName(Specification<Region> spec);
-
-	long deleteStateByReionName(String name);
-
-	List<Region> findAll(Specification<Region> sepc);
-	
-	
-
+	long deleteByName(String name);
 }
